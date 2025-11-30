@@ -8,6 +8,47 @@ const auth = require('../middleware/auth');
 
 const router = express.Router();
 
+// ADD THIS: Base route for /api/auth
+router.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Authentication API Endpoints',
+    endpoints: {
+      signup: {
+        method: 'POST',
+        path: '/api/auth/signup',
+        description: 'User registration with email verification'
+      },
+      login: {
+        method: 'POST',
+        path: '/api/auth/login', 
+        description: 'User login'
+      },
+      verifyEmail: {
+        method: 'GET',
+        path: '/api/auth/verify-email',
+        description: 'Email verification'
+      },
+      forgotPassword: {
+        method: 'POST',
+        path: '/api/auth/forgot-password',
+        description: 'Request password reset'
+      },
+      resetPassword: {
+        method: 'POST',
+        path: '/api/auth/reset-password',
+        description: 'Reset password'
+      },
+      me: {
+        method: 'GET',
+        path: '/api/auth/me',
+        description: 'Get current user (protected)'
+      }
+    },
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Input validation middleware
 const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);

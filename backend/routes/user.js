@@ -6,6 +6,33 @@ const auth = require('../middleware/auth');
 
 const router = express.Router();
 
+// ADD THIS: Base route for /api/user (Protected)
+router.get('/', auth, (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'User Management API Endpoints',
+    user: {
+      id: req.user.id,
+      email: req.user.email,
+      firstName: req.user.first_name,
+      lastName: req.user.last_name
+    },
+    endpoints: {
+      changePassword: {
+        method: 'POST',
+        path: '/api/user/change-password',
+        description: 'Change password while logged in'
+      },
+      updateProfile: {
+        method: 'PUT',
+        path: '/api/user/profile',
+        description: 'Update user profile'
+      }
+    },
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Input validation middleware
 const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);

@@ -43,18 +43,63 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// API Base Route - Add this
+app.get('/api', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Authentication API Base Endpoint',
+    version: '1.0.0',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      auth: {
+        base: '/api/auth',
+        endpoints: {
+          signup: { method: 'POST', path: '/api/auth/signup', description: 'User registration' },
+          login: { method: 'POST', path: '/api/auth/login', description: 'User login' },
+          verifyEmail: { method: 'GET', path: '/api/auth/verify-email', description: 'Email verification' },
+          forgotPassword: { method: 'POST', path: '/api/auth/forgot-password', description: 'Request password reset' },
+          resetPassword: { method: 'POST', path: '/api/auth/reset-password', description: 'Reset password' },
+          me: { method: 'GET', path: '/api/auth/me', description: 'Get current user (protected)' }
+        }
+      },
+      user: {
+        base: '/api/user',
+        endpoints: {
+          changePassword: { method: 'POST', path: '/api/user/change-password', description: 'Change password (protected)' },
+          updateProfile: { method: 'PUT', path: '/api/user/profile', description: 'Update profile (protected)' }
+        }
+      },
+      health: {
+        method: 'GET',
+        path: '/api/health',
+        description: 'Server health check'
+      }
+    },
+    documentation: 'Visit the root endpoint (/) for more information'
+  });
+});
+
 // Root route
 app.get('/', (req, res) => {
   res.status(200).json({
     success: true,
-    message: 'Authentication API Server is running!',
+    message: '🔐 Authentication API Server',
     version: '1.0.0',
+    description: 'Secure authentication system with JWT, email verification, and password reset',
+    baseUrl: 'https://email-system-kt6p.onrender.com',
     endpoints: {
-      auth: '/api/auth',
-      user: '/api/user',
-      health: '/api/health'
+      api: '/api - API information (you are here)',
+      health: '/api/health - Server status',
+      auth: '/api/auth - Authentication endpoints',
+      user: '/api/user - User management endpoints'
     },
-    documentation: 'Check the README for API documentation',
+    features: [
+      'User registration with email verification',
+      'JWT-based authentication',
+      'Password reset with email verification',
+      'Secure password hashing',
+      'Rate limiting and security headers'
+    ],
     timestamp: new Date().toISOString()
   });
 });
@@ -73,7 +118,8 @@ app.use((err, req, res, next) => {
 app.use('*', (req, res) => {
   res.status(404).json({ 
     success: false, 
-    message: 'Route not found' 
+    message: 'Route not found',
+    suggestion: 'Try visiting /api or /api/health for available endpoints'
   });
 });
 
@@ -87,6 +133,11 @@ db.testConnection()
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`📊 Environment: ${process.env.NODE_ENV}`);
       console.log(`🌐 Server URL: http://localhost:${PORT}`);
+      console.log(`🔗 Available endpoints:`);
+      console.log(`   - Root: http://localhost:${PORT}/`);
+      console.log(`   - API Base: http://localhost:${PORT}/api`);
+      console.log(`   - Health: http://localhost:${PORT}/api/health`);
+      console.log(`   - Auth: http://localhost:${PORT}/api/auth`);
     });
   })
   .catch(err => {

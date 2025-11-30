@@ -15,8 +15,16 @@ app.use(helmet());
 
 // CORS Configuration
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true
+  origin: [
+    process.env.FRONTEND_URL || 'http://localhost:3000',
+    'http://localhost:5500', // Live Server
+    'http://127.0.0.1:5500', // Live Server alternative
+    'http://localhost:8080', // XAMPP
+    'https://your-netlify-app.netlify.app' // Your Netlify URL
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
 
 // Rate Limiting

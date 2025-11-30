@@ -43,6 +43,22 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Root route
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Authentication API Server is running!',
+    version: '1.0.0',
+    endpoints: {
+      auth: '/api/auth',
+      user: '/api/user',
+      health: '/api/health'
+    },
+    documentation: 'Check the README for API documentation',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Error Handling Middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -70,6 +86,7 @@ db.testConnection()
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`📊 Environment: ${process.env.NODE_ENV}`);
+      console.log(`🌐 Server URL: http://localhost:${PORT}`);
     });
   })
   .catch(err => {

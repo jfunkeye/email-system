@@ -1,6 +1,6 @@
 // Configuration
 const CONFIG = {
-    API_BASE_URL: 'https://your-backend.onrender.com',
+    API_BASE_URL: 'https://email-system-jrie.onrender.com',
     APP_NAME: 'AuthSystem',
     TOKEN_KEY: 'authToken',
     USER_KEY: 'userData'
